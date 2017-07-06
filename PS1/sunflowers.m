@@ -1,0 +1,72 @@
+function sunflowers
+    clear;
+    close all;
+    M = imread('sunflowers.jpeg');
+    
+    subplot(3,4,[1,4]);
+    imshow(M);
+    axis image;
+    title('Original Input');
+    xlabel(sprintf('Dimensions: %d x %d', size(M,1), size(M,2)));
+        
+    E = energy_image(M);
+    [M1, E1] = doTheSeamW(M, E, 50);
+    [M2, E2] = doTheSeamW(M1, E1, 50);
+    [M3, E3] = doTheSeamW(M2, E2, 50);
+    [M4, E4] = doTheSeamW(M3, E3, 50);
+    
+    subplot(3, 4, 5);
+    imshow(M1);
+    axis image;
+    title('50 seams');
+    
+    subplot(3, 4, 6);
+    imshow(M2);
+    axis image;
+    title('100 seams');
+    
+    subplot(3, 4, 7);
+    imshow(M3);
+    axis image;
+    title('150 seams');
+    
+    subplot(3, 4, 8);
+    imshow(M4);
+    axis image;
+    title('200 seams');
+    
+    subplot(3,4,[9 10]);
+    imshow(M4);
+    axis image;
+    title('Seam Carving');  
+    xlabel(sprintf('Dimensions: %d x %d', size(M4,1), size(M4,2)));  
+    
+    subplot(3,4,[11 12]);
+    M5 = imresize(M, [size(M4,1) size(M4,2)]);
+    imshow(M5);
+    axis image;
+    title('imresize');    
+    xlabel(sprintf('Dimensions: %d x %d', size(M5,1), size(M5,2))); 
+end
+
+function [im1, e1] = doTheSeamH(im, e, num)
+    im1 = im;
+    %[im1, e1] = reduce_width(im, e);
+    for i = 1:num
+        disp(sprintf('Iteration number %d',i));
+        [im1,e] = reduce_height(im1,e);
+        e1 = e;
+    end
+    
+end
+
+function [im1, e1] = doTheSeamW(im, e, num)
+    im1 = im;
+    %[im1, e1] = reduce_width(im, e);
+    for i = 1:num
+        disp(sprintf('Iteration number %d',i));
+        [im1,e] = reduce_width(im1,e);
+        e1 = e;
+    end
+    
+end
